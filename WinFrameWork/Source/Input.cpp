@@ -79,6 +79,25 @@ bool Input::GetMouseButtonUp(const int button)
 	return bButtonUp;
 }
 
+int Input::GetMouseScrollWheel() const
+{
+	return mMouseScrollWheel;
+}
+
+bool Input::IsCursorVisible() const
+{
+	return mIsCursorVisible;
+}
+
+void Input::SetVisibleCursor(const bool isVisible)
+{
+	if (mIsCursorVisible != isVisible)
+	{
+		mIsCursorVisible = isVisible;
+		ShowCursor(mIsCursorVisible);
+	}
+}
+
 void Input::_UpdateKeyState(CoreKey, const short key, const bool bPressed)
 {
 	mIsKeyStateChanged[key] = (mIsPressedKeys[key] != bPressed);
@@ -95,4 +114,14 @@ void Input::_UpdateMouseButtonState(CoreKey, const int button, const bool bPress
 	ASSERT(0 <= button && button < MOUSE_BUTTON_CUONT, "지원하지 않는 버튼입니다.");
 	mIsMouseButtonStateChanged[button] = (mIsPressedMouseButton[button] != bPressed);
 	mIsPressedMouseButton[button] = bPressed;
+}
+
+void Input::_SetMouseScrollWheel(CoreKey, const int scrollWheel)
+{
+	mMouseScrollWheel += scrollWheel;
+}
+
+void Input::_ClearMouseScrollWheel(CoreKey)
+{
+	mMouseScrollWheel = 0;
 }

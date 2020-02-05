@@ -29,12 +29,22 @@ public:
 	// button - 0: 왼쪽 버튼, 1: 오른쪽 버튼, 2: 중간 버튼
 	bool GetMouseButtonUp(const int button);
 
+	int GetMouseScrollWheel() const;
+
+	bool IsCursorVisible() const;
+
+	void SetVisibleCursor(const bool isVisible);
+
 public:
 	void _UpdateKeyState(CoreKey, const short key, const bool bPressed);
 
 	void _UpdateMousePosition(CoreKey, const POINT& mousePosition);
 
 	void _UpdateMouseButtonState(CoreKey, const int button, const bool bPressed);
+
+	void _SetMouseScrollWheel(CoreKey, const int scrollWheel);
+
+	void _ClearMouseScrollWheel(CoreKey);
 
 private:
 	Input() = default;
@@ -56,4 +66,8 @@ private:
 	bool mIsPressedMouseButton[MOUSE_BUTTON_CUONT] = {};
 
 	bool mIsMouseButtonStateChanged[MOUSE_BUTTON_CUONT] = {};
+
+	bool mIsCursorVisible = true;
+
+	int mMouseScrollWheel = {};
 };

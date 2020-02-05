@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdio>
-#include <d3d11.h>
 
 #if defined(DEBUG) | defined(_DEBUG)
 	#ifndef ASSERT

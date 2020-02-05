@@ -54,6 +54,8 @@ void Core::Run(HINSTANCE hInstance)
 		else
 		{
 			MainScene.UpdateLogic();
+
+			Input::Get()._ClearMouseScrollWheel({});
 		}
 	}
 	while (msg.message != WM_QUIT);
@@ -73,6 +75,15 @@ LRESULT CALLBACK Core::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 
 			return 0;
 		}
+
+		case WM_SYSKEYDOWN:
+		case WM_SYSKEYUP:
+			if (wParam == VK_MENU)
+			{
+				Input::Get()._UpdateKeyState({}, wParam, WM_SYSKEYUP - msg);
+				return 0;
+			}
+			break;
 
 		case WM_KEYDOWN:
 		case WM_KEYUP:
@@ -96,6 +107,10 @@ LRESULT CALLBACK Core::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		case WM_MBUTTONDOWN:
 		case WM_MBUTTONUP:
 			Input::Get()._UpdateMouseButtonState({}, 2, WM_MBUTTONUP - msg);
+			return 0;
+
+		case WM_MOUSEWHEEL:
+			Input::Get()._SetMouseScrollWheel({}, static_cast<short>(HIWORD(wParam)));
 			return 0;
 
 		case WM_DESTROY:
