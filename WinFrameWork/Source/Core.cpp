@@ -40,7 +40,7 @@ void Core::Run(HINSTANCE hInstance)
 	ASSERT(hWnd != nullptr, "Failed to call CreateWindow()");
 	ShowWindow(hWnd, SW_SHOW);
 
-	MainScene.Initialize();
+	MainScene.Initialize(hWnd);
 
 	MSG msg = {};
 

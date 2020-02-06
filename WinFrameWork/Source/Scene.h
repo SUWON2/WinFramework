@@ -15,9 +15,12 @@ public:
 
 	~Scene() = default;
 
-	void Initialize();
+	void Initialize(HWND hWnd);
 
 	void UpdateLogic();
 
 	void Draw(HDC hdc);
+
+private:
+	HWND mHWnd = {};
 };

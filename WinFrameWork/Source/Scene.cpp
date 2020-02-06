@@ -1,8 +1,10 @@
 ﻿#include "Scene.h"
 #include "Input.h"
 
-void Scene::Initialize()
+void Scene::Initialize(HWND hWnd)
 {
+	ASSERT(hWnd != nullptr, "The hWnd must not be null");
+	mHWnd = hWnd;
 }
 
 void Scene::UpdateLogic()
