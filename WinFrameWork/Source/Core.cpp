@@ -3,6 +3,11 @@
 #include "CoreKey.h"
 #include "Defined.h"
 
+static constexpr int SCREEN_WIDTH = 800;
+static constexpr int SCREEN_HEIGHT = 600;
+static constexpr int SCREEN_POSITION_X = 0;
+static constexpr int SCREEN_POSITION_Y = 0;
+
 Scene MainScene;
 
 Core::~Core()
@@ -34,8 +39,12 @@ void Core::Run(HINSTANCE hInstance)
 		ASSERT(false, "Failed to call RegisterClassEx()");
 	}
 
+	RECT windowRectangle = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+	AdjustWindowRect(&windowRectangle, WS_OVERLAPPEDWINDOW, FALSE);
+
 	const HWND hWnd = CreateWindow(applicationName, applicationName, WS_OVERLAPPEDWINDOW,
-		0, 0, 800, 600, nullptr, nullptr, hInstance, nullptr);
+		windowRectangle.left + SCREEN_POSITION_X, SCREEN_POSITION_Y, windowRectangle.right - windowRectangle.left, windowRectangle.bottom - windowRectangle.top
+		, nullptr, nullptr, hInstance, nullptr);
 
 	ASSERT(hWnd != nullptr, "Failed to call CreateWindow()");
 	ShowWindow(hWnd, SW_SHOW);
@@ -53,6 +62,8 @@ void Core::Run(HINSTANCE hInstance)
 		}
 		else
 		{
+			Sleep(16); // HACK: CPU 사용률 낮추기 위한 임시처리
+
 			MainScene.UpdateLogic();
 
 			Input::Get()._ClearMouseScrollWheel({});
