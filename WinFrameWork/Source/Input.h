@@ -36,15 +36,15 @@ public:
 	void SetVisibleCursor(const bool isVisible);
 
 public:
-	void _UpdateKeyState(CoreKey, const short key, const bool bPressed);
+	void _Renew(CoreKey);
 
-	void _UpdateMousePosition(CoreKey, const POINT& mousePosition);
+	void _SetKey(CoreKey, const UINT_PTR key, const bool bPressed);
 
-	void _UpdateMouseButtonState(CoreKey, const int button, const bool bPressed);
+	void _SetMousePosition(CoreKey, const POINT& mousePosition);
+
+	void _SetMouseButton(CoreKey, const int button, const bool bPressed);
 
 	void _SetMouseScrollWheel(CoreKey, const int scrollWheel);
-
-	void _ClearMouseScrollWheel(CoreKey);
 
 private:
 	Input() = default;
@@ -52,7 +52,7 @@ private:
 	~Input() = default;
 
 private:
-	static constexpr int VIRTUAL_KEY_COUNT = 128;
+	static constexpr int VIRTUAL_KEY_COUNT = 190;
 
 	bool mIsPressedKeys[VIRTUAL_KEY_COUNT] = {};
 

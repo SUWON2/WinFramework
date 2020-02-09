@@ -62,11 +62,11 @@ void Core::Run(HINSTANCE hInstance)
 		}
 		else
 		{
-			Sleep(16); // HACK: CPU 사용률 낮추기 위한 임시처리
+			Sleep(16); // HACK: CPU 사용률 낮추기 위한 임시로 처리합니다.
 
 			MainScene.UpdateLogic();
 
-			Input::Get()._ClearMouseScrollWheel({});
+			Input::Get()._Renew({});
 		}
 	}
 	while (msg.message != WM_QUIT);
@@ -91,33 +91,33 @@ LRESULT CALLBACK Core::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		case WM_SYSKEYUP:
 			if (wParam == VK_MENU)
 			{
-				Input::Get()._UpdateKeyState({}, wParam, WM_SYSKEYUP - msg);
+				Input::Get()._SetKey({}, wParam, WM_SYSKEYUP - msg);
 				return 0;
 			}
 			break;
 
 		case WM_KEYDOWN:
 		case WM_KEYUP:
-			Input::Get()._UpdateKeyState({}, wParam, WM_KEYUP - msg);
+			Input::Get()._SetKey({}, wParam, WM_KEYUP - msg);
 			return 0;
 
 		case WM_MOUSEMOVE:
-			Input::Get()._UpdateMousePosition({}, { static_cast<short>(LOWORD(lParam)), static_cast<short>(HIWORD(lParam)) });
+			Input::Get()._SetMousePosition({}, { static_cast<short>(LOWORD(lParam)), static_cast<short>(HIWORD(lParam)) });
 			return 0;
 
 		case WM_LBUTTONDOWN:
 		case WM_LBUTTONUP:
-			Input::Get()._UpdateMouseButtonState({}, 0, WM_LBUTTONUP - msg);
+			Input::Get()._SetMouseButton({}, 0, WM_LBUTTONUP - msg);
 			return 0;
 
 		case WM_RBUTTONDOWN:
 		case WM_RBUTTONUP:
-			Input::Get()._UpdateMouseButtonState({}, 1, WM_RBUTTONUP - msg);
+			Input::Get()._SetMouseButton({}, 1, WM_RBUTTONUP - msg);
 			return 0;
 
 		case WM_MBUTTONDOWN:
 		case WM_MBUTTONUP:
-			Input::Get()._UpdateMouseButtonState({}, 2, WM_MBUTTONUP - msg);
+			Input::Get()._SetMouseButton({}, 2, WM_MBUTTONUP - msg);
 			return 0;
 
 		case WM_MOUSEWHEEL:

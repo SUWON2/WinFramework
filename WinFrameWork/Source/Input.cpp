@@ -19,27 +19,13 @@ bool Input::GetKey(const short virtualKey) const
 bool Input::GetKeyDown(const short virtualKey)
 {
 	ASSERT(0 <= virtualKey && virtualKey < VIRTUAL_KEY_COUNT, "지원하지 않는 키입니다.");
-	const bool bKeyDown = (mIsKeyStateChanged[virtualKey] && mIsPressedKeys[virtualKey]);
-
-	if (bKeyDown)
-	{
-		mIsKeyStateChanged[virtualKey] = false;
-	}
-
-	return bKeyDown;
+	return mIsKeyStateChanged[virtualKey] && mIsPressedKeys[virtualKey];
 }
 
 bool Input::GetKeyUp(const short virtualKey)
 {
 	ASSERT(0 <= virtualKey && virtualKey < VIRTUAL_KEY_COUNT, "지원하지 않는 키입니다.");
-	const bool bKeyUp = (mIsKeyStateChanged[virtualKey] && !mIsPressedKeys[virtualKey]);
-
-	if (bKeyUp)
-	{
-		mIsKeyStateChanged[virtualKey] = false;
-	}
-
-	return bKeyUp;
+	return mIsKeyStateChanged[virtualKey] && !mIsPressedKeys[virtualKey];
 }
 
 const POINT& Input::GetMousePosition() const
@@ -56,27 +42,13 @@ bool Input::GetMouseButton(const int button) const
 bool Input::GetMouseButtonDown(const int button)
 {
 	ASSERT(0 <= button && button < MOUSE_BUTTON_CUONT, "지원하지 않는 버튼입니다.");
-	const bool bButtonDown = (mIsMouseButtonStateChanged[button] && mIsPressedMouseButton[button]);
-
-	if (bButtonDown)
-	{
-		mIsMouseButtonStateChanged[button] = false;
-	}
-
-	return bButtonDown;
+	return mIsMouseButtonStateChanged[button] && mIsPressedMouseButton[button];
 }
 
 bool Input::GetMouseButtonUp(const int button)
 {
 	ASSERT(0 <= button && button < MOUSE_BUTTON_CUONT, "지원하지 않는 버튼입니다.");
-	const bool bButtonUp = (mIsMouseButtonStateChanged[button] && !mIsPressedMouseButton[button]);
-
-	if (bButtonUp)
-	{
-		mIsMouseButtonStateChanged[button] = false;
-	}
-
-	return bButtonUp;
+	return mIsMouseButtonStateChanged[button] && !mIsPressedMouseButton[button];
 }
 
 int Input::GetMouseScrollWheel() const
@@ -98,18 +70,25 @@ void Input::SetVisibleCursor(const bool isVisible)
 	}
 }
 
-void Input::_UpdateKeyState(CoreKey, const short key, const bool bPressed)
+void Input::_Renew(CoreKey)
+{
+	memset(mIsKeyStateChanged, false, sizeof(bool) * VIRTUAL_KEY_COUNT);
+	memset(mIsMouseButtonStateChanged, false, sizeof(bool) * MOUSE_BUTTON_CUONT);
+	mMouseScrollWheel = 0;
+}
+
+void Input::_SetKey(CoreKey, const UINT_PTR key, const bool bPressed)
 {
 	mIsKeyStateChanged[key] = (mIsPressedKeys[key] != bPressed);
 	mIsPressedKeys[key] = bPressed;
 }
 
-void Input::_UpdateMousePosition(CoreKey, const POINT& mousePosition)
+void Input::_SetMousePosition(CoreKey, const POINT& mousePosition)
 {
 	mMousePosition = mousePosition;
 }
 
-void Input::_UpdateMouseButtonState(CoreKey, const int button, const bool bPressed)
+void Input::_SetMouseButton(CoreKey, const int button, const bool bPressed)
 {
 	ASSERT(0 <= button && button < MOUSE_BUTTON_CUONT, "지원하지 않는 버튼입니다.");
 	mIsMouseButtonStateChanged[button] = (mIsPressedMouseButton[button] != bPressed);
@@ -119,9 +98,4 @@ void Input::_UpdateMouseButtonState(CoreKey, const int button, const bool bPress
 void Input::_SetMouseScrollWheel(CoreKey, const int scrollWheel)
 {
 	mMouseScrollWheel += scrollWheel;
-}
-
-void Input::_ClearMouseScrollWheel(CoreKey)
-{
-	mMouseScrollWheel = 0;
 }

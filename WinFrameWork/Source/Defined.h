@@ -9,7 +9,7 @@
 			if (!(expr)) \
 			{ \
 				fprintf(stderr, "%s, %s, %s(%d)", (msg), (#expr), __FILE__, __LINE__); \
-				__asm { int 3 } \
+				__debugbreak(); \
 			} \
 		}
 	#endif
