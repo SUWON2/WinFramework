@@ -1,4 +1,4 @@
-#define WIN32_LEAN_AND_MEAN
+ï»¿#define WIN32_LEAN_AND_MEAN
 
 #include <Windows.h>
 
@@ -10,22 +10,22 @@ Input& Input::Get()
 	return input;
 }
 
-bool Input::GetKey(const short virtualKey) const
+bool Input::GetKey(const int virtualKey) const
 {
-	ASSERT(0 <= virtualKey && virtualKey < VIRTUAL_KEY_COUNT, "Áö¿øÇÏÁö ¾Ê´Â Å°ÀÔ´Ï´Ù.");
-	return mIsPressedKeys[virtualKey];
+	ASSERT(0 <= virtualKey && virtualKey < VIRTUAL_KEY_COUNT, "ì§€ì›í•˜ì§€ ì•ŠëŠ” í‚¤ìž…ë‹ˆë‹¤.");
+	return mbPressedKeys[virtualKey];
 }
 
-bool Input::GetKeyDown(const short virtualKey)
+bool Input::GetKeyDown(const int virtualKey) const
 {
-	ASSERT(0 <= virtualKey && virtualKey < VIRTUAL_KEY_COUNT, "Áö¿øÇÏÁö ¾Ê´Â Å°ÀÔ´Ï´Ù.");
-	return mIsKeyStateChanged[virtualKey] && mIsPressedKeys[virtualKey];
+	ASSERT(0 <= virtualKey && virtualKey < VIRTUAL_KEY_COUNT, "ì§€ì›í•˜ì§€ ì•ŠëŠ” í‚¤ìž…ë‹ˆë‹¤.");
+	return mbChangedKeysState[virtualKey] && mbPressedKeys[virtualKey];
 }
 
-bool Input::GetKeyUp(const short virtualKey)
+bool Input::GetKeyUp(const int virtualKey) const
 {
-	ASSERT(0 <= virtualKey && virtualKey < VIRTUAL_KEY_COUNT, "Áö¿øÇÏÁö ¾Ê´Â Å°ÀÔ´Ï´Ù.");
-	return mIsKeyStateChanged[virtualKey] && !mIsPressedKeys[virtualKey];
+	ASSERT(0 <= virtualKey && virtualKey < VIRTUAL_KEY_COUNT, "ì§€ì›í•˜ì§€ ì•ŠëŠ” í‚¤ìž…ë‹ˆë‹¤.");
+	return mbChangedKeysState[virtualKey] && !mbPressedKeys[virtualKey];
 }
 
 const POINT& Input::GetMousePosition() const
@@ -35,20 +35,20 @@ const POINT& Input::GetMousePosition() const
 
 bool Input::GetMouseButton(const int button) const
 {
-	ASSERT(0 <= button && button < MOUSE_BUTTON_CUONT, "Áö¿øÇÏÁö ¾Ê´Â ¹öÆ°ÀÔ´Ï´Ù.");
-	return mIsPressedMouseButton[button];
+	ASSERT(0 <= button && button < MOUSE_BUTTON_CUONT, "ì§€ì›í•˜ì§€ ì•ŠëŠ” ë²„íŠ¼ìž…ë‹ˆë‹¤.");
+	return mbPressedMouseButtons[button];
 }
 
-bool Input::GetMouseButtonDown(const int button)
+bool Input::GetMouseButtonDown(const int button) const
 {
-	ASSERT(0 <= button && button < MOUSE_BUTTON_CUONT, "Áö¿øÇÏÁö ¾Ê´Â ¹öÆ°ÀÔ´Ï´Ù.");
-	return mIsMouseButtonStateChanged[button] && mIsPressedMouseButton[button];
+	ASSERT(0 <= button && button < MOUSE_BUTTON_CUONT, "ì§€ì›í•˜ì§€ ì•ŠëŠ” ë²„íŠ¼ìž…ë‹ˆë‹¤.");
+	return mbChangedMouseButtonsState[button] && mbPressedMouseButtons[button];
 }
 
-bool Input::GetMouseButtonUp(const int button)
+bool Input::GetMouseButtonUp(const int button) const
 {
-	ASSERT(0 <= button && button < MOUSE_BUTTON_CUONT, "Áö¿øÇÏÁö ¾Ê´Â ¹öÆ°ÀÔ´Ï´Ù.");
-	return mIsMouseButtonStateChanged[button] && !mIsPressedMouseButton[button];
+	ASSERT(0 <= button && button < MOUSE_BUTTON_CUONT, "ì§€ì›í•˜ì§€ ì•ŠëŠ” ë²„íŠ¼ìž…ë‹ˆë‹¤.");
+	return mbChangedMouseButtonsState[button] && !mbPressedMouseButtons[button];
 }
 
 int Input::GetMouseScrollWheel() const
@@ -58,44 +58,44 @@ int Input::GetMouseScrollWheel() const
 
 bool Input::IsCursorVisible() const
 {
-	return mIsCursorVisible;
+	return mbCursorVisible;
 }
 
-void Input::SetVisibleCursor(const bool isVisible)
+void Input::SetVisibleCursor(const bool bVisible)
 {
-	if (mIsCursorVisible != isVisible)
+	if (mbCursorVisible != bVisible)
 	{
-		mIsCursorVisible = isVisible;
-		ShowCursor(mIsCursorVisible);
+		mbCursorVisible = bVisible;
+		ShowCursor(mbCursorVisible);
 	}
 }
 
-void Input::_Renew(CoreKey)
+void Input::_Renew()
 {
-	memset(mIsKeyStateChanged, false, sizeof(bool) * VIRTUAL_KEY_COUNT);
-	memset(mIsMouseButtonStateChanged, false, sizeof(bool) * MOUSE_BUTTON_CUONT);
+	memset(mbChangedKeysState, false, sizeof(bool) * VIRTUAL_KEY_COUNT);
+	memset(mbChangedMouseButtonsState, false, sizeof(bool) * MOUSE_BUTTON_CUONT);
 	mMouseScrollWheel = 0;
 }
 
-void Input::_SetKey(CoreKey, const UINT_PTR key, const bool bPressed)
+void Input::_SetKey(const UINT_PTR key, const bool bPressed)
 {
-	mIsKeyStateChanged[key] = (mIsPressedKeys[key] != bPressed);
-	mIsPressedKeys[key] = bPressed;
+	mbChangedKeysState[key] = (mbPressedKeys[key] != bPressed);
+	mbPressedKeys[key] = bPressed;
 }
 
-void Input::_SetMousePosition(CoreKey, const POINT& mousePosition)
+void Input::_SetMousePosition(const POINT& mousePosition)
 {
 	mMousePosition = mousePosition;
 }
 
-void Input::_SetMouseButton(CoreKey, const int button, const bool bPressed)
+void Input::_SetMouseButton(const int button, const bool bPressed)
 {
-	ASSERT(0 <= button && button < MOUSE_BUTTON_CUONT, "Áö¿øÇÏÁö ¾Ê´Â ¹öÆ°ÀÔ´Ï´Ù.");
-	mIsMouseButtonStateChanged[button] = (mIsPressedMouseButton[button] != bPressed);
-	mIsPressedMouseButton[button] = bPressed;
+	ASSERT(0 <= button && button < MOUSE_BUTTON_CUONT, "ì§€ì›í•˜ì§€ ì•ŠëŠ” ë²„íŠ¼ìž…ë‹ˆë‹¤.");
+	mbChangedMouseButtonsState[button] = (mbPressedMouseButtons[button] != bPressed);
+	mbPressedMouseButtons[button] = bPressed;
 }
 
-void Input::_SetMouseScrollWheel(CoreKey, const int scrollWheel)
+void Input::_SetMouseScrollWheel(const int scrollWheel)
 {
 	mMouseScrollWheel += scrollWheel;
 }

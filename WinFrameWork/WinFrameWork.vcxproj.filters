@@ -7,9 +7,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\CoreKey.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Defined.h">
       <Filter>Source</Filter>
     </ClInclude>

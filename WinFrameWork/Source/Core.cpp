@@ -1,6 +1,5 @@
 #include "Core.h"
 #include "Input.h"
-#include "CoreKey.h"
 #include "Defined.h"
 
 static constexpr int SCREEN_WIDTH = 800;
@@ -66,7 +65,7 @@ void Core::Run(HINSTANCE hInstance)
 
 			MainScene.UpdateLogic();
 
-			Input::Get()._Renew({});
+			Input::Get()._Renew();
 		}
 	}
 	while (msg.message != WM_QUIT);
@@ -91,37 +90,37 @@ LRESULT CALLBACK Core::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		case WM_SYSKEYUP:
 			if (wParam == VK_MENU)
 			{
-				Input::Get()._SetKey({}, wParam, WM_SYSKEYUP - msg);
+				Input::Get()._SetKey(wParam, WM_SYSKEYUP - msg);
 				return 0;
 			}
 			break;
 
 		case WM_KEYDOWN:
 		case WM_KEYUP:
-			Input::Get()._SetKey({}, wParam, WM_KEYUP - msg);
+			Input::Get()._SetKey(wParam, WM_KEYUP - msg);
 			return 0;
 
 		case WM_MOUSEMOVE:
-			Input::Get()._SetMousePosition({}, { static_cast<short>(LOWORD(lParam)), static_cast<short>(HIWORD(lParam)) });
+			Input::Get()._SetMousePosition({ static_cast<short>(LOWORD(lParam)), static_cast<short>(HIWORD(lParam)) });
 			return 0;
 
 		case WM_LBUTTONDOWN:
 		case WM_LBUTTONUP:
-			Input::Get()._SetMouseButton({}, 0, WM_LBUTTONUP - msg);
+			Input::Get()._SetMouseButton(0, WM_LBUTTONUP - msg);
 			return 0;
 
 		case WM_RBUTTONDOWN:
 		case WM_RBUTTONUP:
-			Input::Get()._SetMouseButton({}, 1, WM_RBUTTONUP - msg);
+			Input::Get()._SetMouseButton(1, WM_RBUTTONUP - msg);
 			return 0;
 
 		case WM_MBUTTONDOWN:
 		case WM_MBUTTONUP:
-			Input::Get()._SetMouseButton({}, 2, WM_MBUTTONUP - msg);
+			Input::Get()._SetMouseButton(2, WM_MBUTTONUP - msg);
 			return 0;
 
 		case WM_MOUSEWHEEL:
-			Input::Get()._SetMouseScrollWheel({}, static_cast<short>(HIWORD(wParam)));
+			Input::Get()._SetMouseScrollWheel(static_cast<short>(HIWORD(wParam)));
 			return 0;
 
 		case WM_DESTROY:

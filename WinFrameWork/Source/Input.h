@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Defined.h"
-#include "CoreKey.h"
 
 class Input final
 {
@@ -12,11 +11,11 @@ public:
 
 	static Input& Get();
 
-	bool GetKey(const short virtualKey) const;
+	bool GetKey(const int virtualKey) const;
 
-	bool GetKeyDown(const short virtualKey);
+	bool GetKeyDown(const int virtualKey) const;
 
-	bool GetKeyUp(const short virtualKey);
+	bool GetKeyUp(const int virtualKey) const;
 
 	const POINT& GetMousePosition() const;
 
@@ -24,27 +23,27 @@ public:
 	bool GetMouseButton(const int button) const;
 
 	// button - 0: 왼쪽 버튼, 1: 오른쪽 버튼, 2: 중간 버튼
-	bool GetMouseButtonDown(const int button);
+	bool GetMouseButtonDown(const int button) const;
 
 	// button - 0: 왼쪽 버튼, 1: 오른쪽 버튼, 2: 중간 버튼
-	bool GetMouseButtonUp(const int button);
+	bool GetMouseButtonUp(const int button) const;
 
 	int GetMouseScrollWheel() const;
 
 	bool IsCursorVisible() const;
 
-	void SetVisibleCursor(const bool isVisible);
+	void SetVisibleCursor(const bool bVisible);
 
 public:
-	void _Renew(CoreKey);
+	void _Renew();
 
-	void _SetKey(CoreKey, const UINT_PTR key, const bool bPressed);
+	void _SetKey(const UINT_PTR key, const bool bPressed);
 
-	void _SetMousePosition(CoreKey, const POINT& mousePosition);
+	void _SetMousePosition(const POINT& mousePosition);
 
-	void _SetMouseButton(CoreKey, const int button, const bool bPressed);
+	void _SetMouseButton(const int button, const bool bPressed);
 
-	void _SetMouseScrollWheel(CoreKey, const int scrollWheel);
+	void _SetMouseScrollWheel(const int scrollWheel);
 
 private:
 	Input() = default;
@@ -54,20 +53,20 @@ private:
 private:
 	static constexpr int VIRTUAL_KEY_COUNT = 190;
 
-	bool mIsPressedKeys[VIRTUAL_KEY_COUNT] = {};
+	bool mbPressedKeys[VIRTUAL_KEY_COUNT] = {};
 
-	bool mIsKeyStateChanged[VIRTUAL_KEY_COUNT] = {};
+	bool mbChangedKeysState[VIRTUAL_KEY_COUNT] = {};
 
 	POINT mMousePosition = {};
 
 	// 0: 왼쪽, 1: 오른쪽, 2: 중간 버튼
 	static constexpr int MOUSE_BUTTON_CUONT = 3;
 
-	bool mIsPressedMouseButton[MOUSE_BUTTON_CUONT] = {};
+	bool mbPressedMouseButtons[MOUSE_BUTTON_CUONT] = {};
 
-	bool mIsMouseButtonStateChanged[MOUSE_BUTTON_CUONT] = {};
+	bool mbChangedMouseButtonsState[MOUSE_BUTTON_CUONT] = {};
 
-	bool mIsCursorVisible = true;
+	bool mbCursorVisible = true;
 
 	int mMouseScrollWheel = {};
 };
