@@ -106,17 +106,17 @@ LRESULT CALLBACK Core::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 
 		case WM_LBUTTONDOWN:
 		case WM_LBUTTONUP:
-			Input::Get()._SetMouseButton(0, WM_LBUTTONUP - msg);
+			Input::Get()._SetMouseButton(Input::eMouseButton::Left, WM_LBUTTONUP - msg);
 			return 0;
 
 		case WM_RBUTTONDOWN:
 		case WM_RBUTTONUP:
-			Input::Get()._SetMouseButton(1, WM_RBUTTONUP - msg);
+			Input::Get()._SetMouseButton(Input::eMouseButton::Right, WM_RBUTTONUP - msg);
 			return 0;
 
 		case WM_MBUTTONDOWN:
 		case WM_MBUTTONUP:
-			Input::Get()._SetMouseButton(2, WM_MBUTTONUP - msg);
+			Input::Get()._SetMouseButton(Input::eMouseButton::Middle, WM_MBUTTONUP - msg);
 			return 0;
 
 		case WM_MOUSEWHEEL:

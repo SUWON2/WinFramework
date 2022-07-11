@@ -5,45 +5,51 @@
 class Input final
 {
 public:
+	enum class eMouseButton
+	{
+		Left,
+		Right,
+		Middle,
+		Count // must put this at the bottom.
+	};
+
+public:
 	Input(const Input&) = delete;
 
 	Input& operator=(const Input&) = delete;
 
 	static Input& Get();
 
-	bool GetKey(const int virtualKey) const;
+	bool GetKey(int virtualKey) const;
 
-	bool GetKeyDown(const int virtualKey) const;
+	bool GetKeyDown(int virtualKey) const;
 
-	bool GetKeyUp(const int virtualKey) const;
+	bool GetKeyUp(int virtualKey) const;
 
 	const POINT& GetMousePosition() const;
 
-	// button - 0: 왼쪽 버튼, 1: 오른쪽 버튼, 2: 중간 버튼
-	bool GetMouseButton(const int button) const;
+	bool GetMouseButton(eMouseButton button) const;
 
-	// button - 0: 왼쪽 버튼, 1: 오른쪽 버튼, 2: 중간 버튼
-	bool GetMouseButtonDown(const int button) const;
+	bool GetMouseButtonDown(eMouseButton button) const;
 
-	// button - 0: 왼쪽 버튼, 1: 오른쪽 버튼, 2: 중간 버튼
-	bool GetMouseButtonUp(const int button) const;
+	bool GetMouseButtonUp(eMouseButton button) const;
 
 	int GetMouseScrollWheel() const;
 
 	bool IsCursorVisible() const;
 
-	void SetVisibleCursor(const bool bVisible);
+	void SetVisibleCursor(bool bVisible);
 
 public:
 	void _Renew();
 
-	void _SetKey(const UINT_PTR key, const bool bPressed);
+	void _SetKey(UINT_PTR key, bool bPressed);
 
 	void _SetMousePosition(const POINT& mousePosition);
 
-	void _SetMouseButton(const int button, const bool bPressed);
+	void _SetMouseButton(eMouseButton button, bool bPressed);
 
-	void _SetMouseScrollWheel(const int scrollWheel);
+	void _SetMouseScrollWheel(int scrollWheel);
 
 private:
 	Input() = default;
@@ -59,12 +65,9 @@ private:
 
 	POINT mMousePosition = {};
 
-	// 0: 왼쪽, 1: 오른쪽, 2: 중간 버튼
-	static constexpr int MOUSE_BUTTON_CUONT = 3;
+	bool mbPressedMouseButtons[(int)eMouseButton::Count] = {};
 
-	bool mbPressedMouseButtons[MOUSE_BUTTON_CUONT] = {};
-
-	bool mbChangedMouseButtonsState[MOUSE_BUTTON_CUONT] = {};
+	bool mbChangedMouseButtonsState[(int)eMouseButton::Count] = {};
 
 	bool mbCursorVisible = true;
 
